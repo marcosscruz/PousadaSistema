@@ -12,11 +12,10 @@ package br.com.pousada.servicos;
 public class Quarto {
 
     private static int idQuarto = 0;
-    private static int idTipoQuarto = 0;
 
     private int numeroQuarto;
     private String statusQuarto; // IMPORTANTE: mudar a tipagem do variável
-    private int tipoQuarto; // 1 - luxo || 2 - comum
+    private String tipoQuarto; // luxo || comum
 
     /**
      * Construtor parametrizado
@@ -25,7 +24,7 @@ public class Quarto {
      * @param statusQuarto define a situação em que o quarto se encontra
      * @param tipoQuarto   define qual o tipo do quarto (luxo ou comum)
      */
-    public Quarto(int numeroQuarto, String statusQuarto, int tipoQuarto) {
+    public Quarto(int numeroQuarto, String statusQuarto, String tipoQuarto) {
         this.numeroQuarto = numeroQuarto;
         this.statusQuarto = statusQuarto;
         this.tipoQuarto = tipoQuarto;
@@ -44,14 +43,6 @@ public class Quarto {
         Quarto.idQuarto = idQuarto;
     }
 
-    public static int getIdTipoQuarto() {
-        return idTipoQuarto;
-    }
-
-    public static void setIdTipoQuarto(int idTipoQuarto) {
-        Quarto.idTipoQuarto = idTipoQuarto;
-    }
-
     public int getNumeroQuarto() {
         return numeroQuarto;
     }
@@ -68,12 +59,12 @@ public class Quarto {
         this.statusQuarto = statusQuarto;
     }
 
-    public int getTipoQuarto() {
+    public String getTipoQuarto() {
         return tipoQuarto;
     }
 
-    public void setTipoQuarto() {
-        this.tipoQuarto = Quarto.getIdTipoQuarto();
+    public void setTipoQuarto(String tipoQuarto) {
+        this.tipoQuarto = tipoQuarto;
     }
 
     // Q.3 - sobrescrever o método toString() de todas as classes implementadas
