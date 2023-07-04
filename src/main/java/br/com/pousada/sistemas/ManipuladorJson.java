@@ -186,13 +186,123 @@ public class ManipuladorJson {
         String dadosQuartos = jsonObjt.toJson(quarto);
 
         try {
-            quartoWriter = new FileWriter("src\\main\\java\\br\\com\\pousda\\database\\Quartos.json");
+            quartoWriter = new FileWriter("src\\main\\java\\br\\com\\pousada\\database\\Quartos.json");
             quartoWriter.write(dadosQuartos);
         } catch (IOException exception) {
             exception.printStackTrace();
         } finally {
             quartoWriter.close();
         }
+    }
+
+    /**
+     * Função para assimilar dados referentes aos quartos
+     * 
+     * @return lsita de quartos
+     * @throws IOException exceção associada à manipulação de dados JSON
+     */
+    public ArrayList<Quarto> assimilarQuartos() throws IOException {
+        Gson jsonObjt = new Gson();
+        File quartoFile = new File("src\\main\\java\\br\\com\\pousada\\database\\Qaurtos.json");
+
+        try {
+            String dadosQuartos = new String(Files.readAllBytes(Paths.get(quartoFile.toURI())));
+            ArrayList<Quarto> QuartoQ = jsonObjt.fromJson(dadosQuartos, new TypeToken<ArrayList<Quarto>>() {
+            }.getType());
+            return QuartoQ;
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Função para descarregar dados referentes aos Administradores do Sistema
+     * 
+     * @param adm Objeto de Administrador
+     * @throws IOException exceção associada à manipulação de dados JSON
+     */
+    public void descarregarAdm(Administrador adm) throws IOException {
+        Gson jsonObjt = new Gson();
+        File admFile = new File("src\\main\\java\\br\\com\\pousada\\database\\Administradores.json");
+        FileWriter admWriter = null;
+        String dadosAdm = jsonObjt.toJson(adm);
+
+        try {
+            admWriter = new FileWriter("src\\main\\java\\br\\com\\pousada\\database\\Administradores.json");
+            admWriter.write(dadosAdm);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } finally {
+            admWriter.close();
+        }
+    }
+
+    /**
+     * Função para assimilar dados do Administrador salvos no sistema
+     * 
+     * @return obejto do tipo Administrador
+     * @throws IOException exceção associada à manipulação de dados JSON
+     */
+    public Administrador assimilarAdministrador() throws IOException {
+        Gson jsonObjt = new Gson();
+        File admFile = new File("src\\main\\java\\br\\com\\pousada\\database\\Administradores.json");
+
+        try {
+            String dadosAdm = new String(Files.readAllBytes(Paths.get(admFile.toURI())));
+            Administrador admA = jsonObjt.fromJson(dadosAdm, new TypeToken<Administrador>() {
+            }.getType());
+            return admA;
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Função para descarregar dados referentes aos Funcionários do Sistema
+     * 
+     * @param funci objeto de Funcionario
+     * @throws IOException exceção associada à manipulação de dados JSON
+     */
+    public void descarregarFunci(Funcionario funci) throws IOException {
+        Gson jsonObjt = new Gson();
+        File funciFile = new File("src\\main\\java\\br\\com\\pousada\\database\\Funcionarios.json");
+        FileWriter funciWriter = null;
+        String dadosFunci = jsonObjt.toJson(funci);
+
+        try {
+            funciWriter = new FileWriter("src\\main\\java\\br\\com\\pousada\\database\\Funcionarios.json");
+            funciWriter.write(dadosFunci);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } finally {
+            funciWriter.close();
+        }
+    }
+
+    /**
+     * Função para assimilar dados do Funcionários salvos no sistema
+     * 
+     * @return obejto do tipo Funcionario
+     * @throws IOException exceção associada à manipulação de dados JSON
+     */
+    public Funcionario assimilarFuncinario() throws IOException {
+        Gson jsonObjt = new Gson();
+        File funciFile = new File("src\\main\\java\\br\\com\\pousada\\database\\Funcionarios.json");
+
+        try {
+            String dadosFunci = new String(Files.readAllBytes(Paths.get(funciFile.toURI())));
+            Funcionario funciF = jsonObjt.fromJson(dadosFunci, new TypeToken<Funcionario>() {
+            }.getType());
+            return funciF;
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        return null;
     }
 
     // Q.3 - sobrescrever o método toString() de todas as classes implementadas
