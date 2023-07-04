@@ -6,10 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import br.com.pousada.pessoas.Colaborador;
-import br.com.pousada.pessoas.Funcionario;
-import br.com.pousada.pessoas.Hospede;
-import br.com.pousada.pessoas.HospedeComparator;
+import br.com.pousada.pessoas.*;
 
 /**
  * Classe intermediária para funcionalidades direcionadas aos Funcionários
@@ -57,6 +54,15 @@ public class GerenciadorFunci {
     // Q.5 - O sistema deverá armazenar de forma estática os 10 quartos da pousada.
     private static Quarto quartosLuxo[] = new Quarto[5];
     private static Quarto quartosComum[] = new Quarto[5];
+
+    /**
+     * 
+     * 
+     * MUNDAR O RACIOCINIO DA IMPLEMENTAÇÃO DOS QUARTOS
+     * 
+     * 
+     * 
+     */
 
     /**
      * @return Lista de quartos cadastrados no Sistema
@@ -118,7 +124,8 @@ public class GerenciadorFunci {
     }
 
     public void cadastroQuarto() {
-        int numQuarto, tipoQuarto;
+        int numQuarto, tipo;
+        String tipoQuarto;
         String statuQaurto = "Disponível";
         Scanner scanner = new Scanner(System.in);
 
@@ -128,15 +135,17 @@ public class GerenciadorFunci {
         boolean condicao = false;
         do {
             System.out.printf("Tipo do quarto (1. Luxo ou 2. Comum): ");
-            tipoQuarto = scanner.nextInt();
+            tipo = scanner.nextInt();
 
-            if (tipoQuarto == 1) {
+            if (tipo == 1) {
+                tipoQuarto = "Luxo";
                 Quarto quarto = new Quarto(numQuarto, statuQaurto, tipoQuarto);
                 adicionarQuartoLuxo(quarto);
                 statuQaurto = "Reservado";
                 condicao = true;
                 break;
-            } else if (tipoQuarto == 2) {
+            } else if (tipo == 2) {
+                tipoQuarto = "Comum";
                 Quarto quarto = new Quarto(numQuarto, statuQaurto, tipoQuarto);
                 adicionarQuartoComum(quarto);
                 statuQaurto = "Reservado";
