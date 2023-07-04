@@ -2,10 +2,9 @@ package br.com.pousada.sistemas;
 
 import java.io.IOException;
 import java.util.Locale;
-import br.com.pousada.pessoas.Hospede;
-import br.com.pousada.servicos.GerenciadorAdm;
-import br.com.pousada.servicos.GerenciadorFunci;
-import br.com.pousada.servicos.Reserva;
+
+import br.com.pousada.pessoas.*;
+import br.com.pousada.servicos.*;
 
 /**
  * Classe principal para o Sistema da Pousada contendo o método main()
@@ -64,10 +63,12 @@ public class Sistema {
      *
      * @param args
      * @throws IOException a declaração throws IOException é usada para indicar
-     * que o método pode lançar uma exceção relacionada à operação de entrada e
-     * saída (IO), como erros ao ler ou escrever arquivos.
+     *                     que o método pode lançar uma exceção relacionada à
+     *                     operação de entrada e
+     *                     saída (IO), como erros ao ler ou escrever arquivos.
      */
     public static void main(String[] args) throws IOException {
+        // definindo a configuração regional padrão para o programa
         Locale locale = new Locale("pt", "BR");
         Locale.setDefault(locale);
     }
