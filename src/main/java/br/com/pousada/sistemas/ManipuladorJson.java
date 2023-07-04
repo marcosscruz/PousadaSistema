@@ -7,8 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import br.com.pousada.pessoas.Colaborador;
-import br.com.pousada.pessoas.Hospede;
+import br.com.pousada.pessoas.*;
+import br.com.pousada.servicos.*;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -125,18 +125,73 @@ public class ManipuladorJson {
         }
     }
 
-    // ve o que ta dando de errado
-    public ArrayList<String> gerarExtratoReserva() throws IOException {
-        Gson jsonObt = new Gson();
-        File hospedeArquivo = new File("src\\main\\java\\br\\com\\pousada\\database\\Reservas.json");
+    /**
+     * Função para descarregar dados referentes aos extratos de reservas cadastradas
+     * 
+     * @param extratoReservas lista de extratos de Reserva
+     * @throws IOException exceção associada à manipulação de dados JSON
+     */
+    // Q.10 - Cada reserva efetuada vai gerar um extrato que deverá ser impresso e
+    // salvo junto com a informação do cliente que fez a reserva.
+    public void descarregarExtratoReservas(ArrayList<String> extratoReservas) throws IOException {
+        Gson jsonObjt = new Gson();
+        File reservaFile = new File("src\\main\\java\\br\\com\\pousada\\database\\Reservas.json");
+        FileWriter reservaWriter = null;
+        String dadosReservas = jsonObjt.toJson(extratoReservas);
 
         try {
-            String dadosHospede = new String(Files.readAllBytes(Paths.get(hospedeArquivo.toURI())));
-            ArrayList<String> extratosReservas = jsonObt.fromJson(dadosHospede, new TypeToken<ArrayList<String>>() {
-            }.getType());
-            return extratosReservas;
+            reservaWriter = new FileWriter("src\\main\\java\\br\\com\\pousada\\database\\Reservas.json");
+            reservaWriter.write(dadosReservas);
         } catch (IOException exception) {
             exception.printStackTrace();
+        } finally {
+            reservaWriter.close();
+        }
+    }
+
+    /**
+     * Função de assimilação de dados relacinados aos Extratos de Reserva
+     * 
+     * @return lista de extratos de reservas
+     * @throws IOException exceção associada à manipulação de dados JSON
+     */
+    // Q.10 - Cada reserva efetuada vai gerar um extrato que deverá ser impresso e
+    // salvo junto com a informação do cliente que fez a reserva.
+    public ArrayList<String> assimilarExtratoReservas() throws IOException {
+        Gson jsonObjt = new Gson();
+        File hospedeFile = new File("src\\mian\\java\\br\\com\\pousada\\database\\Reservas.json");
+
+        try {
+            String dadosHospede = new String(Files.readAllBytes(Paths.get(hospedeFile.toURI())));
+            ArrayList<String> extratoReservas = jsonObjt.fromJson(dadosHospede, new TypeToken<ArrayList<String>>() {
+            }.getType());
+            return extratoReservas;
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Função para descarregar dados referentes aos quartos
+     * 
+     * @param quarto lista de quartos cadastrados
+     * @throws IOException exceçõa associada à manipulação de dados JSON
+     */
+    public void descarregarQuartos(Quarto[] quarto) throws IOException {
+        Gson jsonObjt = new Gson();
+        File quartoFile = new File("src\\main\\java\\br\\com\\pousada\\database\\Quartos.json");
+
+        FileWriter quartoWriter = null;
+        String dadosQuartos = jsonObjt.toJson(quarto);
+
+        try {
+            quartoWriter = new FileWriter("src\\main\\java\\br\\com\\pousda\\database\\Quartos.json");
+            quartoWriter.write(dadosQuartos);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } finally {
+            quartoWriter.close();
         }
     }
 
