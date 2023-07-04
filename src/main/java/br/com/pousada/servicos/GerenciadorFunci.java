@@ -52,43 +52,22 @@ public class GerenciadorFunci {
     // ===========================================================================================================
     // CRIAÇÃO DOS QUARTOS DE FORMA ESTÁTICA
     // Q.5 - O sistema deverá armazenar de forma estática os 10 quartos da pousada.
-    private static Quarto quartosLuxo[] = new Quarto[5];
-    private static Quarto quartosComum[] = new Quarto[5];
-
-    /**
-     * 
-     * 
-     * MUNDAR O RACIOCINIO DA IMPLEMENTAÇÃO DOS QUARTOS
-     * 
-     * 
-     * 
-     */
+    private static Quarto quartos[] = new Quarto[10];
 
     /**
      * @return Lista de quartos cadastrados no Sistema
      */
-    public static Quarto[] getQuartosLuxo() {
-        return quartosLuxo;
-    }
 
-    public static Quarto[] getQuartosComum() {
-        return quartosComum;
+    public static Quarto[] getQuartos() {
+        return quartos;
     }
 
     /**
-     * @param quartos lista de objetos Quarto representando a lista de quartos de
-     *                luxo
-     */
-    public static void setQuartosLuxo(Quarto[] quartos) {
-        GerenciadorFunci.quartosLuxo = quartos;
-    }
-
-    /**
+     * 
      * @param quartos lista de objetos Quarto representando a lista de quartos
-     *                comuns
      */
-    public static void setQaurtosComum(Quarto[] quartos) {
-        GerenciadorFunci.quartosComum = quartos;
+    public static void setQuartos(Quarto[] quartos) {
+        GerenciadorFunci.quartos = quartos;
     }
 
     // ======================================================================================================================
@@ -96,28 +75,14 @@ public class GerenciadorFunci {
     // Q.5 - O sistema deverá armazenar de forma estática os 10 quartos da pousada.
 
     /**
-     * Função para adição de novos quartos de luxo à lista mantida pelo Sistema
+     * Função para adição de novos quartos à lista mantida pelo Sistema
      * 
-     * @param quarto objeto quarto a ser adicionado à lista de quartos de luxo
+     * @param quarto objeto quarto a ser adicionado à lista de quartos
      */
-    public void adicionarQuartoLuxo(Quarto quarto) {
-        for (int i = 0; i < 5; i++) {
-            if (GerenciadorFunci.quartosLuxo[i] == null) {
-                GerenciadorFunci.quartosLuxo[i] = quarto;
-                break;
-            }
-        }
-    }
-
-    /**
-     * Função para adição de novos quartos comuns à lista mantida pelo Sistema
-     * 
-     * @param quarto objeto quarto a ser adicionado à lista de quartos comuns
-     */
-    public void adicionarQuartoComum(Quarto quarto) {
-        for (int i = 0; i < 5; i++) {
-            if (GerenciadorFunci.quartosComum[i] == null) {
-                GerenciadorFunci.quartosComum[i] = quarto;
+    public void adicionarQuarto(Quarto quarto) {
+        for (int i = 0; i < 10; i++) {
+            if (GerenciadorFunci.quartos[i] == null) {
+                GerenciadorFunci.quartos[i] = quarto;
                 break;
             }
         }
@@ -126,7 +91,7 @@ public class GerenciadorFunci {
     public void cadastroQuarto() {
         int numQuarto, tipo;
         String tipoQuarto;
-        String statuQaurto = "Disponível";
+        String statuQaurto = null; // quarto até presente momento sem informação da situação
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Número do quarto: ");
@@ -140,14 +105,14 @@ public class GerenciadorFunci {
             if (tipo == 1) {
                 tipoQuarto = "Luxo";
                 Quarto quarto = new Quarto(numQuarto, statuQaurto, tipoQuarto);
-                adicionarQuartoLuxo(quarto);
+                adicionarQuarto(quarto);
                 statuQaurto = "Reservado";
                 condicao = true;
                 break;
             } else if (tipo == 2) {
                 tipoQuarto = "Comum";
                 Quarto quarto = new Quarto(numQuarto, statuQaurto, tipoQuarto);
-                adicionarQuartoComum(quarto);
+                adicionarQuarto(quarto);
                 statuQaurto = "Reservado";
                 condicao = true;
                 break;
@@ -187,8 +152,7 @@ public class GerenciadorFunci {
      */
     private static int hospedeCountPrivate;
     protected static int hospedeCountProtected;
-    // IMPORTATE: mover para classe sistema
-
+    
     /**
      * Enfoque no encapsulamento
      * 
@@ -196,6 +160,13 @@ public class GerenciadorFunci {
      */
     public static int getHospedeCountPrivate() {
         return hospedeCountPrivate;
+    }
+    
+    /**
+     * @param hospedes define a lista de hóspedes/clientes para a base do Sistema
+     */
+    public static void setHospedes(ArrayList<Hospede> hospedes) {
+        GerenciadorFunci.listaHospedes = hospedes;
     }
 
     /**
@@ -224,13 +195,6 @@ public class GerenciadorFunci {
             qnt++;
         }
         hospedeCountProtected = qnt;
-    }
-
-    /**
-     * @param hospedes define a lista de hóspedes/clientes para a base do Sistema
-     */
-    public static void setHospedes(ArrayList<Hospede> hospedes) {
-        GerenciadorFunci.listaHospedes = hospedes;
     }
 
     // ===================================================================================================================================
@@ -432,6 +396,41 @@ public class GerenciadorFunci {
 
     public void reservaDefinitiva() {
         // implementar a lógica
+    }
+
+    public void cadastroReserva() {
+        System.out.printf("CPF do hóspede: ");
+        Scanner input = new Scanner(System.in);
+        String cpfHospede = input.nextLine();
+        Hospede h = GerenciadorFunci.consultaHospede(cpfHospede);
+
+        int numReservas = 0;
+
+        if (h != null){
+            Reserva novaReserva = new Reserva();
+
+            for (Hospede hospede : GerenciadorAdm.getListaHospedes()){
+                for(Reserva re : hospede.getReservasHospede()){
+                    numReservas += 1;
+                }
+            }
+            Reserva.setNumReserva(numReservas);
+            novaReserva.setIdReserva();
+
+            boolean reservaCadastrada = false;
+
+            do {
+                int switchCad;
+                System.out.println("Escolha uma opção: \n\t1. Adcionar reservas \n\t2. Lista de reservas");
+                switchCad = input.nextInt();
+
+                switch(switchCad){
+                    case 1:{
+                        System.out.printf("");
+                    }
+                }
+            }
+        }
     }
 
     /**
