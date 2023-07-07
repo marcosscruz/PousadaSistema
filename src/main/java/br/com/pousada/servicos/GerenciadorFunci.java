@@ -1,5 +1,6 @@
 package br.com.pousada.servicos;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import br.com.pousada.pessoas.*;
+import br.com.pousada.servicos.*;
 
 /**
  * Classe intermediária para funcionalidades direcionadas aos Funcionários
@@ -152,7 +154,7 @@ public class GerenciadorFunci {
      */
     private static int hospedeCountPrivate;
     protected static int hospedeCountProtected;
-    
+
     /**
      * Enfoque no encapsulamento
      * 
@@ -161,7 +163,7 @@ public class GerenciadorFunci {
     public static int getHospedeCountPrivate() {
         return hospedeCountPrivate;
     }
-    
+
     /**
      * @param hospedes define a lista de hóspedes/clientes para a base do Sistema
      */
@@ -417,19 +419,54 @@ public class GerenciadorFunci {
             Reserva.setNumReserva(numReservas);
             novaReserva.setIdReserva();
 
-            boolean reservaCadastrada = false;
+            boolean quartoCadastrado = false;
 
             do {
                 int switchCad;
-                System.out.println("Escolha uma opção: \n\t1. Adcionar reservas \n\t2. Lista de reservas");
+                System.out.println("Escolha uma opção: \n\t1. Adcionar reserva \n\t2. Lista de reservas");
                 switchCad = input.nextInt();
 
                 switch(switchCad){
                     case 1:{
-                        System.out.printf("");
+                        System.out.printf("ID da reserva: ");
+                        Integer idQuarto = input.nextInt();
+
+                        for(Quarto quarto : GerenciadorFunci.getQuartos()){
+                            if(quarto != null){
+                                if(quarto.getIdQuarto() == idQuarto){
+                                    novaReserva.setListaQuartos(idQuarto);
+                                    quartoCadastrado = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        String dataInicio, dataFim, cartaoCred;
+                        double precoTotal;
+
+                        boolean parar = false;
+                        do {
+                            System.out.printf("Data início (dd/mm/aaaa): ");
+                            dataInicio = input.nextLine();
+
+                            LocalDate inicioDate = LocalDate.parse(dataInicio, DateTimeFormatter.ofPattern("dd/mm/aaaa"));
+                        } while (parar == false);
+
+                        cadHospede();
+
+                        break;
+                    }
+                    case 2: {
+                        
+                    }
+                    default:{
+                        System.out.println("Opção inválida! Tente novamente.");
+                        
                     }
                 }
-            }
+            } while (quartoCadastrado == false);
+        } else {
+            System.out.println("CPF inválido! Tente novamente.");
         }
     }
 
