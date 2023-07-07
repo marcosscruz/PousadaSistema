@@ -23,7 +23,7 @@ public class Reserva {
     private String numeroCartao;
     private int numeroApartamento;
 
-    private ArrayList<Quarto> listaQuartos = new ArrayList<>();
+    private ArrayList<Integer> listaQuartos = new ArrayList<>();
 
     /**
      * Construtor parametrizado
@@ -114,12 +114,12 @@ public class Reserva {
         this.numeroApartamento = numeroApartamento;
     }
 
-    public ArrayList<Quarto> getListaQuartos() {
+    public ArrayList<Integer> getListaQuartos() {
         return listaQuartos;
     }
 
-    public void setListaQuartos(ArrayList<Quarto> listaQuartos) {
-        this.listaQuartos = listaQuartos;
+    public void setListaQuartos(Integer idQuarto) {
+        this.listaQuartos.add(idQuarto);
     }
 
     // Q.3 - Implementar o método toString() de todas as classes implementadas
