@@ -1,5 +1,7 @@
 package br.com.pousada.servicos;
 
+import java.time.LocalDate;
+
 /**
  *
  * Classe representativa da entidade Quarto no Sistema
@@ -16,7 +18,7 @@ public class Quarto {
     private int numeroQuarto;
     private String statusQuarto; // IMPORTANTE: mudar a tipagem do variável
     private String tipoQuarto; // luxo || comum
-
+    
     /**
      * Construtor parametrizado
      *
