@@ -116,7 +116,7 @@ public class ManipuladorJson {
         File hospedeFile = new File("src\\main\\java\\br\\com\\pousada\\database\\Hospedes.json");
 
         try {
-            String dadosHospede = new String(File.readAllBytes(Paths.get(hospedeFile.toURI())));
+            String dadosHospede = new String(Files.readAllBytes(Paths.get(hospedeFile.toURI())));
             ArrayList<Hospede> HospedeH = jsonObj.fromJson(dadosHospede, new TypeToken<ArrayList<Hospede>>() {
             }.getType());
             return HospedeH;
