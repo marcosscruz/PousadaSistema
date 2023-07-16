@@ -16,27 +16,29 @@ public class Reserva {
     private int idReserva;
 
     private String numeroCartao;
-    private double precoReserva;
+    private double precoReserva; // referente a UMA diária
+    private double precoReservaTotal; // referente aos DIAS reservados
     private LocalDate dataInicio;
     private LocalDate dataFim;
-    private Quarto quarto;
+    private Quarto quarto; // quarto compõem reserva
 
     private ArrayList<Integer> listaQuartos = new ArrayList<>();
 
     /**
      * Construtor parametrizado
      *
-     * @param numeroCartao      define os dados do cartão de crédito do cliente
-     * @param precoReserva      define o valor da reserva de acordo com o cadastro
-     *                          do tipo de quarto
-     * @param dataInicio        define a data de reserva do quarto
-     * @param dataFim           define a data final da reserva
-     * @param quarto            define uma quantidade quartos por reserva
+     * @param numeroCartao define os dados do cartão de crédito do cliente
+     * @param precoReserva define o valor da reserva de acordo com o cadastro
+     *                     do tipo de quarto
+     * @param dataInicio   define a data de reserva do quarto
+     * @param dataFim      define a data final da reserva
+     * @param quarto       define uma quantidade quartos por reserva
      */
-    public Reserva(String numeroCartao, double precoReserva, LocalDate dataInicio,
+    public Reserva(String numeroCartao, double precoReserva, double precoReservaTotal, LocalDate dataInicio,
             LocalDate dataFim, Quarto quarto) {
         this.numeroCartao = numeroCartao;
         this.precoReserva = precoReserva;
+        this.precoReservaTotal = precoReservaTotal;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.quarto = quarto;
@@ -61,6 +63,15 @@ public class Reserva {
 
     public void setPrecoReserva(double precoReserva) {
         this.precoReserva = precoReserva;
+
+    }
+
+    public double getPrecoReservaTotal() {
+        return precoReservaTotal;
+    }
+
+    public void setPrecoReservaTotal(double precoReservaTotal) {
+        this.precoReservaTotal = precoReservaTotal;
     }
 
     public LocalDate getDataInicio() {
@@ -116,6 +127,6 @@ public class Reserva {
     // Q.3 - Implementar o método toString() de todas as classes implementadas
     @Override
     public String toString() {// incompleto
-        return getNumeroCartao() + "   " + getNumeroApartamento() + "  " + getNumeroCartao();
+        return getNumeroCartao();
     }
 }
