@@ -123,7 +123,6 @@ public class GerenciadorFunci {
             }
         } while (condicao == false);
 
-        System.out.println("Quarto reservado com sucesso!");
         return null;
     }
 
@@ -366,14 +365,6 @@ public class GerenciadorFunci {
     // MANIPULAÇÃO DA LISTA DE RESERVAS
 
     /**
-     * Fornece métodos para formatar uma data/hora em uma determinada
-     * representação de string e também para analisar uma string em um objeto de
-     * data/hora.
-     */
-    DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("dd/mm/aaaa");
-    DateTimeFormatter localHourFormatter = DateTimeFormatter.ofPattern("hh:mm");
-
-    /**
      * Q.9 - As reservas e os clientes devem ser salvas de forma dinâmica no
      * sistema.
      */
@@ -393,6 +384,12 @@ public class GerenciadorFunci {
         GerenciadorFunci.listaReservas = listaReservas;
     }
 
+    // RESERVAS
+    private static ArrayList<String> extratoReservas = new ArrayList<>();
+
+    /**
+     * Função para cadastro de novas reservas a um hóspede
+     */
     public void cadastroReserva() {
         System.out.printf("CPF do hóspede: ");
         Scanner input = new Scanner(System.in);
@@ -435,19 +432,44 @@ public class GerenciadorFunci {
                             }
                         }
 
-                        int numQrt = 0;
-                        String statu = null, tipo = null;
-
-
-
-
                         boolean parar = false;
                         do {
                             cadHospede();
-                            
-                            cadastroQuarto(numQrt, statu, tipo);
+                            Quarto novoQuarto = cadastroQuarto();
 
-                            
+                            System.out.printf("Data Início (dd/mm/aaaa): ");
+                            String inicioString = input.nextLine();
+
+                            System.out.printf("Data Fim (dd/mm/aaaa): ");
+                            String fimString = input.nextLine();
+
+                            /**
+                             * Fornece métodos para formatar uma data/hora em uma determinada
+                             * representação de string e também para analisar uma string em um objeto de
+                             * data/hora.
+                             */
+                            LocalDate dataInicio = LocalDate.parse(inicioString,
+                                    DateTimeFormatter.ofPattern("dd/mm/yyyy"));
+                            LocalDate dataFim = LocalDate.parse(fimString, DateTimeFormatter.ofPattern("dd/mm/yyyy"));
+
+                            // calcula o número de dias da reserva
+                            long numeroDias = ChronoUnit.DAYS.between(dataInicio, dataFim);
+
+                            System.out.printf("Número do cartão de crédito: ");
+                            String creditCard = input.nextLine();
+
+                            double precoDiaria = 0.0, precoTotal = 0.0;
+
+                            final double precoLuxo = 300.00;
+                            final double precoComum = 150.00;
+
+                            if (novoQuarto.getTipoQuarto().equals("Luxo")) {
+                                precoDiaria = precoLuxo;
+                                precoTotal = numeroDias * precoLuxo;
+                            } else if (novoQuarto.getTipoQuarto().equals("Comum")) {
+                                precoDiaria = precoComum;
+                                precoTotal = numeroDias * precoComum;
+                            }
 
                             parar = true;
                         } while (parar == false);
@@ -476,16 +498,111 @@ public class GerenciadorFunci {
                 }
             } while (quartoCadastrado == false);
 
+            h.setReservasHospede(novaReserva);
+
+            System.out.printf("EXTRATO: \n-------------------------\n" + h.getCPF() + " " + h.getNomePessoa() + " "
+                    + h.getSobrenomePessoa() + "\n" + novaReserva);
+
         } else {
             System.out.println("CPF inválido! Tente novamente.");
         }
     }
 
     /**
+     * Q.10 - Cada reserva efetuada vai gerar um extrato que deverá ser impresso e
+     * salvo
+     * junto com a informação do cliente que fez a reserva.
+     * 
+     * @return lista de extratos de todas as reservas cadastradas
+     */
+    public static ArrayList<String> getExtratosReservas() {
+        return extratoReservas;
+    }
+
+    /**
+     * Q.10 - Cada reserva efetuada vai gerar um extrato que deverá ser impresso e
+     * salvo junto com a informação do cliente que fez a reserva.
+     * 
+     * @param extratosReservas lista de extratos
+     */
+    public static void setExtratosReservas(ArrayList<String> extratosReservas) {
+        GerenciadorFunci.extratoReservas = extratosReservas;
+    }
+
+    public ArrayList<String> extratosReservas() {
+        ArrayList<String> extratos = new ArrayList<>();
+        for (Hospede hospede : GerenciadorAdm.getListaHospedes()) {
+            for (Reserva reserva : hospede.getReservasHospede()) {
+                extratos.add(hospede.getCPF() + " " + hospede.getNomePessoa().toUpperCase() + " ["
+                        + reserva.getIdReserva() + "]  Valor diária: R$" + reserva.getPrecoReserva()
+                        + " Data de início: " + reserva.getDataInicio());
+            }
+        }
+        GerenciadorAdm.setExtratosReservas(extratos);
+        return GerenciadorAdm.getExtratosReservas();
+    }
+
+    /**
      * Q.8 - Verificar e imprimir dados das reservas e dos clientes;
      */
-    public void imprimirReserva() {
-        // implementar a lógica
+    public void imprimirDadosReservaHospedes() {
+        boolean finalizar = false;
+
+        do {
+            System.out.println("Escolha uma opção: \n\t1. Exibir reservas \n\t2. Finalizar");
+            Scanner input = new Scanner(System.in);
+            int caso = input.nextInt();
+
+            switch (caso) {
+                case 1: {
+                    System.out.println("===== Dados =====");
+
+                    for (Hospede hospede : GerenciadorAdm.getListaHospedes()) {
+                        System.out.println(
+                                "Nome: " + hospede.getNomePessoa().toUpperCase() + " CPF: " + hospede.getCPF());
+
+                        System.out.println("Reservas:");
+                        for (Reserva reserva : hospede.getReservasHospede()) {
+                            System.out.println("Número reserva: " + reserva.getIdReserva() + " Data de Entrada: "
+                                    + reserva.getDataInicio() + " Data de Saída: " + reserva.getDataFim()
+                                    + " Preço total: " + reserva.getPrecoReservaTotal());
+                        }
+                        System.out.println("=====================");
+                    }
+                    break;
+                }
+                case 2: {
+                    finalizar = true;
+                    break;
+                }
+                default: {
+                    System.out.println("Opção Inválida! Tente novamente.");
+                }
+            }
+        } while (finalizar == false);
+    }
+
+    public void modificarReserva() {
+        // implementar a lógica mais tarde
+    }
+
+    /**
+     * Função padrão de consulta a uma Reserva associado a um Hóspede
+     * 
+     * @param idReserva chave de busca de reserva
+     * @param hospede   Hóspede associado a reserva
+     * @return objeto do tipo Reserva se a chave satisfazer as condições
+     */
+    public Reserva consultaReserva(int idReserva, Hospede hospede) {
+        Reserva reservaConsultar = new Reserva();
+        reservaConsultar = null;
+
+        for (int i = 0; i < hospede.getReservasHospede().size(); i++) {
+            if (hospede.getReservasHospede().get(i).getIdReserva() == idReserva) {
+                reservaConsultar = hospede.getReservasHospede().get(i);
+            }
+        }
+        return reservaConsultar;
     }
 
     // ======================================================================================================================
