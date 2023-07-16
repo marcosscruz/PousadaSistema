@@ -2,6 +2,7 @@ package br.com.pousada.servicos;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -90,40 +91,40 @@ public class GerenciadorFunci {
         }
     }
 
-    public void cadastroQuarto() {
-        int numQuarto, tipo;
-        String tipoQuarto;
-        String statuQaurto = null; // quarto até presente momento sem informação da situação
+    public Quarto cadastroQuarto() {
+        String tipoQrt, situacao = null; // quarto até presente momento sem informação da situação
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Número do quarto: ");
-        numQuarto = scanner.nextInt();
+        int numeroQrt = scanner.nextInt();
 
         boolean condicao = false;
         do {
             System.out.printf("Tipo do quarto (1. Luxo ou 2. Comum): ");
-            tipo = scanner.nextInt();
+            int tipo = scanner.nextInt();
 
             if (tipo == 1) {
-                tipoQuarto = "Luxo";
-                Quarto quarto = new Quarto(numQuarto, statuQaurto, tipoQuarto);
+                tipoQrt = "Luxo";
+                situacao = "Reservado";
+                Quarto quarto = new Quarto(numeroQrt, situacao, tipoQrt);
                 adicionarQuarto(quarto);
-                statuQaurto = "Reservado";
                 condicao = true;
-                break;
+                return quarto;
             } else if (tipo == 2) {
-                tipoQuarto = "Comum";
-                Quarto quarto = new Quarto(numQuarto, statuQaurto, tipoQuarto);
+                tipoQrt = "Comum";
+                situacao = "Reservado";
+                Quarto quarto = new Quarto(numeroQrt, situacao, tipoQrt);
                 adicionarQuarto(quarto);
-                statuQaurto = "Reservado";
                 condicao = true;
-                break;
+                return quarto;
             } else {
                 System.out.print("Tipo de quarto inválido. Tente novamente!");
             }
         } while (condicao == false);
 
-        System.out.println("Cadastro realizado com sucesso!");
+        System.out.println("Quarto reservado com sucesso!");
+        return null;
     }
 
     // ============================================================================================================================================
@@ -392,14 +393,6 @@ public class GerenciadorFunci {
         GerenciadorFunci.listaReservas = listaReservas;
     }
 
-    public void reservaPreliminar() {
-        // implementar a lógica
-    }
-
-    public void reservaDefinitiva() {
-        // implementar a lógica
-    }
-
     public void cadastroReserva() {
         System.out.printf("CPF do hóspede: ");
         Scanner input = new Scanner(System.in);
@@ -408,11 +401,11 @@ public class GerenciadorFunci {
 
         int numReservas = 0;
 
-        if (h != null){
+        if (h != null) {
             Reserva novaReserva = new Reserva();
 
-            for (Hospede hospede : GerenciadorAdm.getListaHospedes()){
-                for(Reserva re : hospede.getReservasHospede()){
+            for (Hospede hospede : GerenciadorAdm.getListaHospedes()) {
+                for (Reserva re : hospede.getReservasHospede()) {
                     numReservas += 1;
                 }
             }
@@ -423,17 +416,18 @@ public class GerenciadorFunci {
 
             do {
                 int switchCad;
-                System.out.println("Escolha uma opção: \n\t1. Adcionar reserva \n\t2. Lista de reservas");
+                System.out.println(
+                        "Escolha uma opção: \n\t1. Adcionar reserva \n\t2. Lista de reservas \n\t3. Finalizar");
                 switchCad = input.nextInt();
 
-                switch(switchCad){
-                    case 1:{
+                switch (switchCad) {
+                    case 1: {
                         System.out.printf("ID da reserva: ");
                         Integer idQuarto = input.nextInt();
 
-                        for(Quarto quarto : GerenciadorFunci.getQuartos()){
-                            if(quarto != null){
-                                if(quarto.getIdQuarto() == idQuarto){
+                        for (Quarto quarto : GerenciadorFunci.getQuartos()) {
+                            if (quarto != null) {
+                                if (quarto.getIdQuarto() == idQuarto) {
                                     novaReserva.setListaQuartos(idQuarto);
                                     quartoCadastrado = true;
                                     break;
@@ -441,30 +435,47 @@ public class GerenciadorFunci {
                             }
                         }
 
-                        String dataInicio, dataFim, cartaoCred;
-                        double precoTotal;
+                        int numQrt = 0;
+                        String statu = null, tipo = null;
+
+
+
 
                         boolean parar = false;
                         do {
-                            System.out.printf("Data início (dd/mm/aaaa): ");
-                            dataInicio = input.nextLine();
+                            cadHospede();
+                            
+                            cadastroQuarto(numQrt, statu, tipo);
 
-                            LocalDate inicioDate = LocalDate.parse(dataInicio, DateTimeFormatter.ofPattern("dd/mm/aaaa"));
+                            
+
+                            parar = true;
                         } while (parar == false);
-
-                        cadHospede();
-
                         break;
                     }
                     case 2: {
-                        
+                        for (Quarto reserva : GerenciadorFunci.getQuartos()) {
+                            if (reserva != null) {
+                                System.out.println("[" + reserva.getIdQuarto() + "]" + "  "
+                                        + reserva.getTipoQuarto().toUpperCase());
+                            }
+                        }
+                        System.out.println("\n");
+                        quartoCadastrado = false;
+                        break;
                     }
-                    default:{
+                    case 3: {
+                        System.out.printf("Processo finalizado com sucesso!");
+                        quartoCadastrado = true;
+                        break;
+                    }
+                    default: {
                         System.out.println("Opção inválida! Tente novamente.");
-                        
+
                     }
                 }
             } while (quartoCadastrado == false);
+
         } else {
             System.out.println("CPF inválido! Tente novamente.");
         }
