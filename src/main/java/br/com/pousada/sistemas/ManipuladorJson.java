@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import br.com.pousada.pessoas.*;
 import br.com.pousada.servicos.*;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -18,8 +18,16 @@ import com.google.gson.reflect.TypeToken;
  *
  * @author Marcos Vinícius Santos Cruz
  * @author Filipe Fernades Costa
- */
-/**
+ * 
+ * @see <a href="https://mvnrepository.com/artifact/com.google.code.gson/gson">
+ * Gson MvnRepository </a>
+ * 
+ * @see <a href="https://www.devmedia.com.br/como-converter-objetos-java-para-ou-de-json-com-a-biblioteca-gson/28091">
+ * DevMedia - Como converter objetos java para Json com a biblioteca Gson </a>
+ * 
+ * @see <a href="https://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt">
+ * StackOverflow - Convert from json to a typed ArrayList </a>
+ *
  * Q.14 - Salve e recupere todas as informações dos Clientes, Quartos,
  * Colaboradores e Reservas em um arquivo de texto. Utilizem classes já prontas
  * na internet que trabalhem com o formato json. Ao manipular um arquivo utilize
