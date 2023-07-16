@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import br.com.pousada.pessoas.Administrador;
-import br.com.pousada.pessoas.Funcionario;
+import br.com.pousada.pessoas.*;
 
 /**
  * Classe intermediária para funcionalidades direcionadas aos Administradores,
@@ -452,4 +451,5 @@ public class GerenciadorAdm extends GerenciadorFunci {
     public String toString() {
         return "Gerendiador Administrador";
     }
+
 }
