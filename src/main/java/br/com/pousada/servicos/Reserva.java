@@ -1,7 +1,6 @@
 package br.com.pousada.servicos;
 
-import java.time.*;
-import java.time.format.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -16,33 +15,31 @@ public class Reserva {
     private static int numReserva = 0;
     private int idReserva;
 
-    private String dataInicioReserva;
-    private String dataFimReserva;
-    private String horaReserva;
-    private double precoReserva;
     private String numeroCartao;
-    private int numeroApartamento;
+    private double precoReserva;
+    private LocalDate dataInicio;
+    private LocalDate dataFim;
+    private Quarto quarto;
 
     private ArrayList<Integer> listaQuartos = new ArrayList<>();
 
     /**
      * Construtor parametrizado
      *
-     * @param dataInicioReserva define o dia do início da reserva
-     * @param dataFimReserva    define o fim da reserva
-     * @param horaReserva       define a hora em que a reserva foi criada
-     * @param precoReserva      define o valor que a reserva vale
      * @param numeroCartao      define os dados do cartão de crédito do cliente
-     * @param numeroApartamento define número do quarto
+     * @param precoReserva      define o valor da reserva de acordo com o cadastro
+     *                          do tipo de quarto
+     * @param dataInicio        define a data de reserva do quarto
+     * @param dataFim           define a data final da reserva
+     * @param quarto            define uma quantidade quartos por reserva
      */
-    public Reserva(String dataInicioReserva, String dataFimReserva, String horaReserva, double precoReserva,
-            String numeroCartao, int numeroApartamento) {
-        this.dataInicioReserva = dataInicioReserva;
-        this.dataFimReserva = dataFimReserva;
-        this.horaReserva = horaReserva;
-        this.precoReserva = precoReserva;
+    public Reserva(String numeroCartao, double precoReserva, LocalDate dataInicio,
+            LocalDate dataFim, Quarto quarto) {
         this.numeroCartao = numeroCartao;
-        this.numeroApartamento = numeroApartamento;
+        this.precoReserva = precoReserva;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.quarto = quarto;
     }
 
     // Construtor padrão
@@ -50,6 +47,48 @@ public class Reserva {
     }
 
     // getters e setters
+    public String getNumeroCartao() {
+        return numeroCartao;
+    }
+
+    public void setNumeroCartao(String numeroCartao) {
+        this.numeroCartao = numeroCartao;
+    }
+
+    public double getPrecoReserva() {
+        return precoReserva;
+    }
+
+    public void setPrecoReserva(double precoReserva) {
+        this.precoReserva = precoReserva;
+    }
+
+    public LocalDate getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(LocalDate dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public LocalDate getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(LocalDate dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public Quarto getQuarto() {
+        return quarto;
+    }
+
+    public void setQuarto(Quarto quarto) {
+        this.quarto = quarto;
+    }
+
+    // =======================================
+
     public static int getNumReserva() {
         return numReserva;
     }
@@ -66,54 +105,6 @@ public class Reserva {
         this.idReserva = Reserva.getNumReserva();
     }
 
-    public String getDataInicioReserva() {
-        return dataInicioReserva;
-    }
-
-    public void setDataInicioReserva(String dataInicioReserva) {
-        this.dataInicioReserva = dataInicioReserva;
-    }
-
-    public String getDataFimReserva() {
-        return dataFimReserva;
-    }
-
-    public void setDataFimReserva(String dataFimReserva) {
-        this.dataFimReserva = dataFimReserva;
-    }
-
-    public String getHoraReserva() {
-        return horaReserva;
-    }
-
-    public void setHoraReserva(String horaReserva) {
-        this.horaReserva = horaReserva;
-    }
-
-    public double getPrecoReserva() {
-        return precoReserva;
-    }
-
-    public void setPrecoReserva(double precoReserva) {
-        this.precoReserva = precoReserva;
-    }
-
-    public String getNumeroCartao() {
-        return numeroCartao;
-    }
-
-    public void setNumeroCartao(String numeroCartao) {
-        this.numeroCartao = numeroCartao;
-    }
-
-    public int getNumeroApartamento() {
-        return numeroApartamento;
-    }
-
-    public void setNumeroApartamento(int numeroApartamento) {
-        this.numeroApartamento = numeroApartamento;
-    }
-
     public ArrayList<Integer> getListaQuartos() {
         return listaQuartos;
     }
@@ -125,8 +116,6 @@ public class Reserva {
     // Q.3 - Implementar o método toString() de todas as classes implementadas
     @Override
     public String toString() {// incompleto
-        return getDataInicioReserva() + " " + getDataFimReserva() + " " + getPrecoReserva() + "   " + getNumeroCartao()
-                + "   " + getNumeroApartamento() + "  " + getNumeroCartao();
+        return getNumeroCartao() + "   " + getNumeroApartamento() + "  " + getNumeroCartao();
     }
-
 }
