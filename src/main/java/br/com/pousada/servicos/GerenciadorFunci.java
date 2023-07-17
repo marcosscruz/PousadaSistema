@@ -1,8 +1,9 @@
 package br.com.pousada.servicos;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import br.com.pousada.pessoas.*;
-import br.com.pousada.servicos.*;
 
 /**
  * Classe intermediária para funcionalidades direcionadas aos Funcionários
@@ -45,12 +45,12 @@ public class GerenciadorFunci {
         colaboradores.remove(colaborador);
     }
 
-    public List<Funcionario> getFuncionarios() {
+    public static List<Funcionario> getFuncionarios() {
         return funcionarios;
     }
 
     public static void setFuncionario(Funcionario funcionario) {
-        GerenciadorFunci.funcionarios = funcionario;
+        GerenciadorFunci.funcionarios = (List<Funcionario>) funcionario;
     }
 
     public void addFunci(Funcionario funcionario) {
@@ -61,7 +61,7 @@ public class GerenciadorFunci {
         funcionarios.remove(funcionario);
     }
 
-    // ===========================================================================================================
+    // =======================================================================================
     // CRIAÇÃO DOS QUARTOS DE FORMA ESTÁTICA
     // Q.5 - O sistema deverá armazenar de forma estática os 10 quartos da pousada.
     private static Quarto quartos[] = new Quarto[10];
@@ -82,7 +82,7 @@ public class GerenciadorFunci {
         GerenciadorFunci.quartos = quartos;
     }
 
-    // ======================================================================================================================
+    // =====================================================================================
     // MANIPULAÇÃO DA LISTA DE QUARTOS
     // Q.5 - O sistema deverá armazenar de forma estática os 10 quartos da pousada.
 
@@ -100,6 +100,10 @@ public class GerenciadorFunci {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public Quarto cadastroQuarto() {
         String tipoQrt, situacao = null; // quarto até presente momento sem informação da situação
 
@@ -466,6 +470,7 @@ public class GerenciadorFunci {
 
                             System.out.printf("Número do cartão de crédito: ");
                             String creditCard = input.nextLine();
+                            novaReserva.setNumeroCartao(creditCard);
 
                             double precoDiaria = 0.0, precoTotal = 0.0;
 
@@ -479,6 +484,9 @@ public class GerenciadorFunci {
                                 precoDiaria = precoComum;
                                 precoTotal = numeroDias * precoComum;
                             }
+
+                            novaReserva.setPrecoReserva(precoDiaria);
+                            novaReserva.setPrecoReservaTotal(precoTotal);
 
                             parar = true;
                         } while (parar == false);
@@ -508,13 +516,194 @@ public class GerenciadorFunci {
             } while (quartoCadastrado == false);
 
             h.setReservasHospede(novaReserva);
+            novaReserva.setStatuReserva(2);
 
-            System.out.printf("EXTRATO: \n-------------------------\n" + h.getCPF() + " " + h.getNomePessoa() + " "
-                    + h.getSobrenomePessoa() + "\n" + novaReserva);
+            System.out.printf(
+                    "EXTRATO: \n-------------------------\n" + h.getCPF() + " " + h.getNomePessoa().toUpperCase() + " "
+                            + h.getSobrenomePessoa().toUpperCase() + "\n" + novaReserva);
 
         } else {
             System.out.println("CPF inválido! Tente novamente.");
         }
+    }
+
+    /**
+     * função de acesso as opções de alteração de reservas
+     * 
+     * @param idReserva chave de busca de reservas na lista de reservas associado a
+     *                  um hóspede
+     * @param hospede   hóspede o qual possui uma lista de reservas associada e ele
+     */
+    public void modificarReserva(int idReserva, Hospede hospede) {
+        Scanner input = new Scanner(System.in);
+        boolean sairMneu = false;
+        do {
+            if (consultaReserva(idReserva, hospede) != null) {
+                Reserva modficaReserva = consultaReserva(idReserva, hospede);
+                System.out.println("Dados da Reserva: \n--------------------------\n");
+                System.out.println("ID: " + modficaReserva.getIdReserva() + " Data: " + modficaReserva.getDataInicio()
+                        + " Valor Diária: " + modficaReserva.getPrecoReserva() + "\n--------------------------");
+                System.out.println(
+                        "\nEscolaha uma opção: \n\t1. Alterar data de início \n\t2. Alterar data final \n\t3. Alterar statu reserva \n\t4. Fechar");
+                int opcao = input.nextInt();
+                switch (opcao) {
+                    case 1: {
+                        System.out.println("Entre com o a nova data de início (dd/MM/yyyy): ");
+                        String novaDataInicioStr = input.nextLine();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate novaDataInicio = LocalDate.parse(novaDataInicioStr, formatter);
+                        modficaReserva.setDataInicio(novaDataInicio);
+                        System.out.println("Alteração realizada com sucesso!");
+                        break;
+                    }
+                    case 2: {
+                        System.out.println("Entre com o a nova data final (dd/MM/yyyy): ");
+                        String novaDataFimStr = input.nextLine();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate novaDataFim = LocalDate.parse(novaDataFimStr, formatter);
+                        modficaReserva.setDataInicio(novaDataFim);
+                        System.out.println("Alteração realizada com sucesso!");
+                        break;
+                    }
+                    case 3: {
+                        System.out.println(
+                                "Insira o código do sattu: \n\t1. Preliminar \n\t2.Definitiva \n\t3.Cancelada");
+                        int novoStatu = input.nextInt();
+                        modficaReserva.setStatuReserva(novoStatu);
+                        System.out.println("Alteração realizada com sucesso!");
+                        break;
+                    }
+                    case 4: {
+                        System.out.println("Finalizando...");
+                        sairMneu = true;
+                        break;
+                    }
+                    default: {
+                        System.out.println("Opção Inválida!");
+                    }
+                }
+            }
+        } while (sairMneu == false);
+    }
+
+    /**
+     * Função para exclusão de reservas do sistema
+     */
+    public void excluirReserva() {
+        System.out.println("CPF: ");
+        Scanner input = new Scanner(System.in);
+        String cpf = input.nextLine();
+        Hospede hospede = GerenciadorAdm.consultaHospede(cpf);
+        if (hospede != null) {
+            System.out.println("RESERVAS CADASTRADAS: \n----------------------------");
+            for (int i = 0; i < hospede.getReservasHospede().size(); i++) {
+                LocalDate dataReserva = hospede.getReservasHospede().get(i).getDataInicio();
+                System.out.println("ID: " + hospede.getReservasHospede().get(i).getIdReserva() + " DATA: "
+                        + hospede.getReservasHospede().get(i).getDataInicio());
+            }
+
+            System.out.println("ID da Reserva: ");
+            int idReservaDel = input.nextInt();
+
+            for (int r = 0; r < hospede.getReservasHospede().size(); r++) {
+                if (hospede.getReservasHospede().get(r).getIdReserva() == idReservaDel) {
+                    hospede.getReservasHospede().remove(r);
+                    System.out.println("Reserva removida com sucesso!");
+                }
+            }
+        }
+    }
+
+    /**
+     * função para acesso as opcções de exibição de reservas realizadas no sistema
+     * fornece as opções de listagem por intervalo de datas
+     */
+    public void listarReservas() {
+        boolean encerrar = false;
+        do {
+            System.out.println("Escolha uma Opção: \n\t1. Pesquisar por uma data \n\t2. Voltar");
+            Scanner input = new Scanner(System.in);
+            int opcao = input.nextInt();
+            switch (opcao) {
+                case 1: {
+                    String diaMin = null, diaMax = null, mesMin = null, mesMax = null, anoMin = null, anoMax = null;
+                    boolean validaMin = false, validaMax = false;
+                    while (validaMax == false || validaMin == false) {
+                        System.out.println("DE\n------------------------------");
+
+                        input = new Scanner(System.in);
+                        System.out.println("Dia (ex.: 02): ");
+                        diaMin = input.nextLine();
+                        if (diaMin.length() == 1) {
+                            diaMin = "0" + diaMin;
+                        }
+
+                        System.out.println("Mês (ex.: 04): ");
+                        mesMin = input.nextLine();
+                        if (mesMin.length() == 1) {
+                            mesMin = "0" + mesMin;
+                        }
+
+                        System.out.println("Ano (ex.: 2002): ");
+                        anoMin = input.nextLine();
+
+                        System.out.println("ATÉ\n------------------------------ ");
+
+                        System.out.println("Dia (ex.: 02): ");
+                        diaMax = input.nextLine();
+                        if (diaMax.length() == 1) {
+                            diaMax = "0" + diaMax;
+                        }
+
+                        System.out.println("Mês (ex.: 01): ");
+                        mesMax = input.nextLine();
+                        if (mesMax.length() == 1) {
+                            mesMax = "0" + mesMin;
+                        }
+
+                        System.out.println("Ano (ex.: 2023): ");
+                        anoMax = input.nextLine();
+
+                        String dataMin = anoMin + mesMin + diaMin;
+                        String dataMax = anoMax + mesMax + diaMax;
+
+                        validaMin = isDateValid(dataMin);
+                        validaMax = isDateValid(dataMax);
+                    }
+                    LocalDate dateMin = LocalDate.parse(anoMin + "-" + mesMin + "-" + diaMin);
+                    LocalDate dateMax = LocalDate.parse(anoMax + "-" + mesMax + "-" + diaMax);
+                    System.out.println("Reservas Cadastradas\n------------------------------");
+                    for (int i = 0; i < GerenciadorAdm.getListaHospedes().size(); i++) {
+                        for (int j = 0; j < GerenciadorAdm.getListaHospedes().size(); j++) {
+                            LocalDate dataReserva = GerenciadorAdm.getListaHospedes().get(i).getReservasHospede().get(j)
+                                    .getDataFim();
+                            LocalDate dataPrint = GerenciadorAdm.getListaHospedes().get(i).getReservasHospede().get(j)
+                                    .getDataFim();
+                            if ((dataReserva.isEqual(dateMin) || (dataReserva.isAfter(dateMin)))
+                                    && ((dataReserva.isEqual(dateMax)) || (dataReserva.isBefore(dateMax)))) {
+                                System.out.println("Hóspede: "
+                                        + GerenciadorAdm.getListaHospedes().get(i).getNomePessoa().toUpperCase() + " "
+                                        + GerenciadorAdm.getListaHospedes().get(i).getSobrenomePessoa().toUpperCase()
+                                        + "\nENDEREÇO: " + GerenciadorAdm.getListaHospedes().get(i).getEnderecoHospede()
+                                        + "\nTELEONE: " + GerenciadorAdm.getListaHospedes().get(i).getTelefoneHospede()
+                                        + "\nID RESERVA: "
+                                        + GerenciadorAdm.getListaHospedes().get(i).getReservasHospede().get(j)
+                                                .getIdReserva()
+                                        + "\n------------------------------");
+                            }
+                        }
+                    }
+                    break;
+                }
+                case 2: {
+                    encerrar = true;
+                    break;
+                }
+                default: {
+                    System.out.println("Opção Inválida!");
+                }
+            }
+        } while (encerrar == false);
     }
 
     /**
@@ -589,10 +778,6 @@ public class GerenciadorFunci {
                 }
             }
         } while (finalizar == false);
-    }
-
-    public void modificarReserva() {
-        // implementar a lógica mais tarde
     }
 
     /**
@@ -678,6 +863,26 @@ public class GerenciadorFunci {
             }
         }
         return attFunci;
+    }
+
+    /**
+     * função para identificação de datas válidas
+     * 
+     * @param strDate recebe uma data em formato String para validação
+     * @return estado de validação: true ou false
+     */
+    public static boolean isDateValid(String strDate) {
+        // Formatter de data
+        String dateFormat = "uuuuMMdd";
+        // Resolver Strict garante que seja feito dentro dos valores possíveis
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat)
+                .withResolverStyle(ResolverStyle.STRICT);
+        try {
+            LocalDate date = LocalDate.parse(strDate, dateTimeFormatter);
+            return true; // Se for válida
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
     // Q.3 - sobrescrever o método toString() de todas as classes implementadas
