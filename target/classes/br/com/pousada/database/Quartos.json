@@ -1,0 +1,20 @@
+[
+    {
+        "numeroQuarto":"0",
+        "statusQuarto":"Reservado",
+        "tipoQuarto":"Luxo"
+    },
+    {
+        "numeroQuarto":"1",
+        "statusQuarto":"Reservado",
+        "tipoQuarto":"Comum"
+    },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+]
