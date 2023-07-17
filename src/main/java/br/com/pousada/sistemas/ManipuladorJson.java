@@ -138,6 +138,7 @@ public class ManipuladorJson {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+        return null;
     }
 
     /**
