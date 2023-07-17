@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.pousada.pessoas.*;
 import br.com.pousada.servicos.*;
@@ -20,19 +21,24 @@ import com.google.gson.reflect.TypeToken;
  * @author Filipe Fernades Costa
  * 
  * @see <a href="https://mvnrepository.com/artifact/com.google.code.gson/gson">
- * Gson MvnRepository </a>
+ *      Gson MvnRepository </a>
  * 
- * @see <a href="https://www.devmedia.com.br/como-converter-objetos-java-para-ou-de-json-com-a-biblioteca-gson/28091">
- * DevMedia - Como converter objetos java para Json com a biblioteca Gson </a>
+ * @see <a href=
+ *      "https://www.devmedia.com.br/como-converter-objetos-java-para-ou-de-json-com-a-biblioteca-gson/28091">
+ *      DevMedia - Como converter objetos java para Json com a biblioteca Gson
+ *      </a>
  * 
- * @see <a href="https://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt">
- * StackOverflow - Convert from json to a typed ArrayList </a>
+ * @see <a href=
+ *      "https://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt">
+ *      StackOverflow - Convert from json to a typed ArrayList </a>
  *
- * Q.14 - Salve e recupere todas as informações dos Clientes, Quartos,
- * Colaboradores e Reservas em um arquivo de texto. Utilizem classes já prontas
- * na internet que trabalhem com o formato json. Ao manipular um arquivo utilize
- * os conceitos aprendidos em aula para alocar e desalocar recursos com
- * segurança.
+ *      Q.14 - Salve e recupere todas as informações dos Clientes, Quartos,
+ *      Colaboradores e Reservas em um arquivo de texto. Utilizem classes já
+ *      prontas
+ *      na internet que trabalhem com o formato json. Ao manipular um arquivo
+ *      utilize
+ *      os conceitos aprendidos em aula para alocar e desalocar recursos com
+ *      segurança.
  */
 public class ManipuladorJson {
 
@@ -43,16 +49,17 @@ public class ManipuladorJson {
     /**
      * Funcção que descarrega dados referentes aos colaboradores cadastrados
      * 
-     * @param colab Lista de colaboradores do sistema
+     * @param list Lista de colaboradores do sistema
      * @throws IOException exceção associada à manipulação de dados JSON
      */
-    public void descarregarColab(Colaborador colab) throws IOException {
-        Gson jsonObt = new Gson(); // Criação de uma instância da classe Gson para realizar a
-                                   // serialização/deserialização JSON.
+    public void descarregarColab(List<Colaborador> list) throws IOException {
+        // Criação de uma instância da classe Gson para realizar a
+        // serialização/deserialização JSON.
+        Gson jsonObt = new Gson();
         File colaboradorArquivo = new File("src\\main\\java\\br\\com\\pousada\\database\\Colaboradores.json");
 
         FileWriter colaboradorWriter = null;
-        String dadosColaboradores = jsonObt.toJson(colab);
+        String dadosColaboradores = jsonObt.toJson(list);
 
         try {
             colaboradorWriter = new FileWriter("src\\main\\java\\br\\com\\pousada\\database\\Colaboradores.json");
@@ -209,13 +216,13 @@ public class ManipuladorJson {
      * @return lsita de quartos
      * @throws IOException exceção associada à manipulação de dados JSON
      */
-    public ArrayList<Quarto> assimilarQuartos() throws IOException {
+    public Quarto[] assimilarQuartos() throws IOException {
         Gson jsonObjt = new Gson();
         File quartoFile = new File("src\\main\\java\\br\\com\\pousada\\database\\Qaurtos.json");
 
         try {
             String dadosQuartos = new String(Files.readAllBytes(Paths.get(quartoFile.toURI())));
-            ArrayList<Quarto> QuartoQ = jsonObjt.fromJson(dadosQuartos, new TypeToken<ArrayList<Quarto>>() {
+            Quarto[] QuartoQ = jsonObjt.fromJson(dadosQuartos, new TypeToken<Quarto[]>() {
             }.getType());
             return QuartoQ;
         } catch (IOException exception) {
@@ -313,9 +320,34 @@ public class ManipuladorJson {
         return null;
     }
 
+    /**
+     * Função destinada à chamada das funções de assimilação de forma geral
+     * 
+     * @throws IOException exceção associada à manipulação de dados JSON
+     */
+    public void assimilarGeral() throws IOException {
+        GerenciadorFunci.setFuncionario(assimilarFuncinario());
+        GerenciadorAdm.setHospedes(assimilarHospedes());
+        GerenciadorAdm.setQuartos(assimilarQuartos());
+    }
+
+    /**
+     * Função destinada à chamada das funções de descarregamento de dados de forma
+     * geral
+     * 
+     * @param menuColab
+     * @throws IOException exceção associada à manipulação de dados JSON
+     */
+    public void descarregarGeral(GerenciadorFunci menuColab) throws IOException {
+        descarregarColab(GerenciadorAdm.getColaboradores());
+        descarregarHospede(GerenciadorAdm.getListaHospedes());
+        descarregarQuartos(GerenciadorAdm.getQuartos());
+        descarregarExtratoReservas(menuColab.extratosReservas());
+    }
+
     // Q.3 - sobrescrever o método toString() de todas as classes implementadas
     @Override
     public String toString() {
-        return "Manipulador JSON";
+        return "Manipulação de Arquivos JSON";
     }
 }
