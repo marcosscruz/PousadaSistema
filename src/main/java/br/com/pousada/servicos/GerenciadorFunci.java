@@ -1,5 +1,6 @@
 package br.com.pousada.servicos;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -20,16 +21,20 @@ import br.com.pousada.servicos.*;
 // Q.1 - Implementar todas as classes com base no diagrma de classes criado
 public class GerenciadorFunci {
 
-    private List<Funcionario> funcionarios = new ArrayList<>();
-    private List<Colaborador> colaboradores = new ArrayList<>();
+    private static List<Funcionario> funcionarios = new ArrayList<>();
+    private static ArrayList<Colaborador> colaboradores = new ArrayList<>();
 
     // Construtor padrão
     public GerenciadorFunci() {
     }
 
     // get e set
-    public List<Colaborador> getColaboradores() {
+    public static List<Colaborador> getColaboradores() {
         return colaboradores;
+    }
+
+    public static void setColaboradores(ArrayList<Colaborador> colaboradores) {
+        GerenciadorFunci.colaboradores = colaboradores;
     }
 
     public void addColab(Colaborador colaborador) {
@@ -42,6 +47,10 @@ public class GerenciadorFunci {
 
     public List<Funcionario> getFuncionarios() {
         return funcionarios;
+    }
+
+    public static void setFuncionario(Funcionario funcionario) {
+        GerenciadorFunci.funcionarios = funcionario;
     }
 
     public void addFunci(Funcionario funcionario) {
@@ -437,10 +446,10 @@ public class GerenciadorFunci {
                             cadHospede();
                             Quarto novoQuarto = cadastroQuarto();
 
-                            System.out.printf("Data Início (dd/mm/aaaa): ");
+                            System.out.printf("Data Início (dd/MM/yyyy): ");
                             String inicioString = input.nextLine();
 
-                            System.out.printf("Data Fim (dd/mm/aaaa): ");
+                            System.out.printf("Data Fim (dd/MM/yyyy): ");
                             String fimString = input.nextLine();
 
                             /**
@@ -449,8 +458,8 @@ public class GerenciadorFunci {
                              * data/hora.
                              */
                             LocalDate dataInicio = LocalDate.parse(inicioString,
-                                    DateTimeFormatter.ofPattern("dd/mm/yyyy"));
-                            LocalDate dataFim = LocalDate.parse(fimString, DateTimeFormatter.ofPattern("dd/mm/yyyy"));
+                                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                            LocalDate dataFim = LocalDate.parse(fimString, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
                             // calcula o número de dias da reserva
                             long numeroDias = ChronoUnit.DAYS.between(dataInicio, dataFim);
