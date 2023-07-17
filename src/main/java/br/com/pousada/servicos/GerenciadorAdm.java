@@ -42,24 +42,43 @@ public class GerenciadorAdm extends GerenciadorFunci {
     public void gerarDespesasDoMes() {
         Scanner input = new Scanner(System.in);
 
-        System.out.println("Nome da despesa: ");
-        String nome = input.nextLine();
+        boolean parada = false;
+        do {
+            System.out.println("Selecione uma opção: \n\t1. Gerenciar despesas \n\t2. Finalizar");
+            int escolha = input.nextInt();
 
-        System.out.println("Descrição: ");
-        String desc = input.nextLine();
+            switch (escolha) {
+                case 1: {
+                    System.out.println("Nome da despesa: ");
+                    String nome = input.nextLine();
 
-        System.out.println("Valor a ser pago: ");
-        double valor = input.nextDouble();
+                    System.out.println("Descrição: ");
+                    String desc = input.nextLine();
 
-        System.out.println("Data da despesa (mm/yyyy): ");
-        String dataString = input.nextLine();
+                    System.out.println("Valor a ser pago: ");
+                    double valor = input.nextDouble();
 
-        LocalDate data = LocalDate.parse(dataString, DateTimeFormatter.ofPattern("MM/yyyy"));
+                    System.out.println("Data da despesa (mm/yyyy): ");
+                    String dataString = input.nextLine();
 
-        Despesa novaDespesa = new Despesa(nome, desc, valor, data);
-        despesas.add(novaDespesa);
+                    LocalDate data = LocalDate.parse(dataString, DateTimeFormatter.ofPattern("MM/yyyy"));
 
-        System.out.println("Despesa salva com sucesso!");
+                    Despesa novaDespesa = new Despesa(nome, desc, valor, data);
+                    despesas.add(novaDespesa);
+                }
+                case 2: {
+                    System.out.println("Finalizando...");
+                    parada = true;
+                    break;
+                }
+                default: {
+                    System.out.println("Opção Inválida! Tente novamente.");
+                }
+            }
+
+        } while (parada == false);
+
+        System.out.println("Despesas salva com sucesso!");
     }
 
     public double gerarBalancoMensal(int mes, int ano) {
@@ -89,14 +108,14 @@ public class GerenciadorAdm extends GerenciadorFunci {
     // =======================================================================================================
     // MANIPULAÇÃO DE FUNCIONÁRIOS
 
-    private List<Funcionario> funcionarios = new ArrayList<>();
+    private static List<Funcionario> funcionarios = new ArrayList<>();
 
-    public List<Funcionario> getFuncionarios() {
+    public static List<Funcionario> getFuncionarios() {
         return funcionarios;
     }
 
     public void setFuncionario(List<Funcionario> funcionarios) {
-        this.funcionarios = funcionarios;
+        GerenciadorAdm.funcionarios = funcionarios;
     }
 
     /**
@@ -138,13 +157,14 @@ public class GerenciadorAdm extends GerenciadorFunci {
      * Q.6 - Deve ser possível cadastrar os colaboradores no sistema, alterar ou
      * editar seus atributos;
      * 
-     * @param funcionario chave de busca do objeto Funcinario na base de
-     *                    colaboradores do sistema
+     * @param cpf chave de busca do objeto Funcinario na base de
+     *            colaboradores do sistema
      */
-    public void editarFunci(Funcionario funcionario) {
+    public void editarFunci(String cpf) {
+        Funcionario funci = consultaFunci(cpf);
         boolean menuAnaterior = false;
         do {
-            System.out.println(funcionario + "\n--------------------------------\n");
+            System.out.println(cpf + "\n--------------------------------\n");
             Scanner entrarDados = new Scanner(System.in);
             System.out.println(
                     "Escolha uma opção: \n\t1. Alterar login \n\t2. Alterar senha \n\t3. Alterar CPF \n\t4. Alterar nome \n\t5. Fechar menu");
@@ -159,7 +179,7 @@ public class GerenciadorAdm extends GerenciadorFunci {
                     String confirmarLogin = entrarDados.nextLine();
 
                     if (novoLogin.equals(confirmarLogin)) {
-                        funcionario.setLoginUsuario(confirmarLogin);
+                        funci.setLoginUsuario(confirmarLogin);
                         break;
                     } else {
                         System.out.println("Dados inseridos não conferem. Tente novamente.");
@@ -177,9 +197,9 @@ public class GerenciadorAdm extends GerenciadorFunci {
                     System.out.printf("Confrimar senha: ");
                     String confirmarSenha = entrarDados.nextLine();
 
-                    if (funcionario.getSenhaUsuario().equals(senhaAnterior)) {
+                    if (funci.getSenhaUsuario().equals(senhaAnterior)) {
                         if (novaSenha.equals(confirmarSenha)) {
-                            funcionario.setSenhaUsuario(novaSenha);
+                            funci.setSenhaUsuario(novaSenha);
                             System.out.println("Senha alterada com sucesso!");
                             break;
                         } else {
@@ -203,7 +223,7 @@ public class GerenciadorAdm extends GerenciadorFunci {
                             break;
                         }
                     } while (GerenciadorAdm.validaCPF(novoCPF) == false || consultaColab(novoCPF) != null);
-                    funcionario.setCPF(novoCPF);
+                    funci.setCPF(novoCPF);
                     System.out.println("Alteração feita com sucesso!");
                     break;
                 }
@@ -211,11 +231,11 @@ public class GerenciadorAdm extends GerenciadorFunci {
                     entrarDados = new Scanner(System.in);
                     System.out.printf("Novo nome: ");
                     String novoNome = entrarDados.nextLine();
-                    funcionario.setNomePessoa(novoNome);
+                    funci.setNomePessoa(novoNome);
 
                     System.out.printf("Novo sobrenome: ");
                     String novoSobrenome = entrarDados.nextLine();
-                    funcionario.setSobrenomePessoa(novoSobrenome);
+                    funci.setSobrenomePessoa(novoSobrenome);
 
                     System.out.println("Alteração feita com sucesso!");
                     break;
@@ -304,6 +324,15 @@ public class GerenciadorAdm extends GerenciadorFunci {
         Administrador administrador = new Administrador(nomeColab, sobrenomeColab, CPF, loginColab, senhaColab);
         addAdm(administrador);
         System.out.println("Cadastro de Administrsdor feito com sucesso!");
+    }
+
+    /**
+     * função para exibição dos dados associados ao ADM
+     * 
+     * @param administrador ADM que deve esta logado no momento da chamada
+     */
+    public void consultaAdm(Administrador administrador) {
+        System.out.println(administrador);
     }
 
     /**
