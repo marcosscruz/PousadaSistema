@@ -11,7 +11,7 @@ import br.com.pousada.servicos.*;
  *
  * @author Marcos Vinícius Santos Cruz
  * @author Filipe Fernades Costa
- * @version 1.0.10
+ * @version 1.01.1
  */
 // Q.1 - Implementar todas as classes com base no diagrama de classes criado
 public class Sistema {
