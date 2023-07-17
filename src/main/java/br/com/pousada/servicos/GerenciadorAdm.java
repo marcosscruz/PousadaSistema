@@ -1,5 +1,7 @@
 package br.com.pousada.servicos;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,12 +29,61 @@ public class GerenciadorAdm extends GerenciadorFunci {
     // =======================================================================================================
     // FUNCIONALIDADES DO ADMINISTRADOR
 
-    public void gerenciamentoDespesa() {
-        // implementar a lógica
+    private List<Despesa> despesas;
+
+    public List<Despesa> getDespesas() {
+        return despesas;
     }
 
-    public void gerarBalancoMensal() {
-        // implementar a lógica
+    public void setDespesas(List<Despesa> despesas) {
+        this.despesas = despesas;
+    }
+
+    public void gerarDespesasDoMes() {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Nome da despesa: ");
+        String nome = input.nextLine();
+
+        System.out.println("Descrição: ");
+        String desc = input.nextLine();
+
+        System.out.println("Valor a ser pago: ");
+        double valor = input.nextDouble();
+
+        System.out.println("Data da despesa (mm/yyyy): ");
+        String dataString = input.nextLine();
+
+        LocalDate data = LocalDate.parse(dataString, DateTimeFormatter.ofPattern("MM/yyyy"));
+
+        Despesa novaDespesa = new Despesa(nome, desc, valor, data);
+        despesas.add(novaDespesa);
+
+        System.out.println("Despesa salva com sucesso!");
+    }
+
+    public double gerarBalancoMensal(int mes, int ano) {
+        double totalReceitas = 0.0, totalDespesas = 0.0;
+
+        for (Reserva reserva : GerenciadorAdm.getListaReservas()) {
+            LocalDate dataReservaInicio = reserva.getDataInicio();
+
+            // verifica se a reserva ocorreu no mês e ano especificados
+            if (dataReservaInicio.getMonthValue() == mes && dataReservaInicio.getYear() == ano) {
+                totalReceitas += reserva.getPrecoReservaTotal();
+            }
+        }
+
+        for (Despesa despesa : despesas) {
+            LocalDate dataDespesa = despesa.getData();
+
+            if (dataDespesa.getMonthValue() == mes && dataDespesa.getYear() == ano) {
+                totalDespesas += despesa.getValorDespesa();
+            }
+        }
+
+        double balanco = totalReceitas - totalDespesas;
+        return balanco;
     }
 
     // =======================================================================================================
