@@ -1,6 +1,7 @@
 package br.com.pousada.servicos;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -14,6 +15,7 @@ public class Reserva {
 
     private static int numReserva = 0;
     private int idReserva;
+    private int statuReserva;
 
     private String numeroCartao;
     private double precoReserva; // referente a UMA diária
@@ -49,6 +51,14 @@ public class Reserva {
     }
 
     // getters e setters
+    public int getStatuReserva() {
+        return statuReserva;
+    }
+
+    public void setStatuReserva(int statuReserva) {
+        this.statuReserva = statuReserva;
+    }
+
     public String getNumeroCartao() {
         return numeroCartao;
     }
@@ -126,7 +136,24 @@ public class Reserva {
 
     // Q.3 - Implementar o método toString() de todas as classes implementadas
     @Override
-    public String toString() {// incompleto
-        return getNumeroCartao();
+    public String toString() {
+        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String statu = null;
+        switch (statuReserva) {
+            case 1: {
+                statu = "PRELIMINAR";
+                break;
+            }
+            case 2: {
+                statu = "DEFINITIVA";
+                break;
+            }
+            case 3: {
+                statu = "CANCELADA";
+                break;
+            }
+        }
+        return "[" + idReserva + "] RESERVADO EM: " + dataFim.format(dataFormatter) + " PREÇO TOTAL: "
+                + precoReservaTotal + " STATU: " + statu.toUpperCase();
     }
 }
