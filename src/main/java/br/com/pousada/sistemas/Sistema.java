@@ -76,6 +76,28 @@ public class Sistema {
         Locale locale = new Locale("pt", "BR");
         Locale.setDefault(locale);
 
+        /*
+         * TESTES DE FUNÇÕES
+         * As chamadas a seguir representam testes de funções conforme as questões que
+         * poderiam ser identificadas pelo uso de funções.
+         * 
+         * Ainda, tenha em mente que essas funções foram pensadas para serem executadas
+         * enquanto um sistema completo e cujos diferentes componentes interagem entre
+         * si. Assim, as chamadas individuais das funções podem não apresentar
+         * o mesmo comportamento que aconteceria se estivessem sido chamadas pelo
+         * sistema, função iniciarSistema que será a última a ser chamada nessa lista.
+         * 
+         * PARA O ACESSO:
+         * 
+         * ADMINISTRADOR:
+         * login: admin
+         * senha: admin
+         * 
+         * FUNCINÁRIO:
+         * login: colab1
+         * senha: colab1
+         */
+
         ManipuladorJson manipuladorJson = new ManipuladorJson();
         manipuladorJson.assimilarGeral();
 
@@ -118,7 +140,8 @@ public class Sistema {
             }
 
             // lançamneto da receita do mês
-            // System.out.println("\nBalanço Geral do Meês\n------------------------------");
+            // System.out.println("\nBalanço Geral do
+            // Meês\n------------------------------");
             // menuAdm.gerarDespesasDoMes();
 
             // comparator hóspede
@@ -141,7 +164,7 @@ public class Sistema {
         } else if (userAtual instanceof Funcionario) {
             System.out.println("Nível de Acesso: Funcionário " + userAtual);
 
-            // extrato 
+            // extrato
             System.out.println("\nCadastro Reservas \n------------------------------");
             menuFunci.cadastroReserva();
 
@@ -149,7 +172,7 @@ public class Sistema {
             System.out.println("\nExtratos Reservas \n------------------------------");
             manipuladorJson.descarregarExtratoReservas(menuFunci.extratosReservas());
             GerenciadorFunci.setExtratosReservas(manipuladorJson.assimilarExtratoReservas());
-            for(String extratoString : GerenciadorFunci.getExtratosReservas()){
+            for (String extratoString : GerenciadorFunci.getExtratosReservas()) {
                 System.out.println(extratoString);
             }
 
@@ -160,7 +183,7 @@ public class Sistema {
             String cpf = input.nextLine();
             System.out.println("Lista de Reservas do Hóspde: ");
             Collections.sort(GerenciadorAdm.consultaHospede(cpf).getReservasHospede(), new ReservaComparator());
-            for(int i=0; i<GerenciadorAdm.consultaHospede(cpf).getReservasHospede().size(); i++){
+            for (int i = 0; i < GerenciadorAdm.consultaHospede(cpf).getReservasHospede().size(); i++) {
                 System.out.println(GerenciadorAdm.consultaHospede(cpf).getReservasHospede().get(i));
             }
 
@@ -171,7 +194,7 @@ public class Sistema {
         }
 
         manipuladorJson.descarregarGeral(menuFunci);
-        if(userAtual instanceof Administrador){
+        if (userAtual instanceof Administrador) {
             manipuladorJson.descarregarAdm((Administrador) userAtual);
         }
 
