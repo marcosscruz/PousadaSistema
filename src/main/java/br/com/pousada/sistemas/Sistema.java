@@ -13,7 +13,7 @@ import br.com.pousada.servicos.*;
  *
  * @author Marcos Vinícius Santos Cruz
  * @author Filipe Fernades Costa
- * @version 1.02.1
+ * @version 1.02.2
  */
 // Q.1 - Implementar todas as classes com base no diagrama de classes criado
 public class Sistema {
@@ -68,8 +68,8 @@ public class Sistema {
      * @param args
      * @throws IOException a declaração throws IOException é usada para indicar
      *                     que o método pode lançar uma exceção relacionada à
-     *                     operação de entrada e
-     *                     saída (IO), como erros ao ler ou escrever arquivos.
+     *                     operação de entrada e saída (IO), como erros ao ler ou
+     *                     escrever arquivos.
      */
     public static void main(String[] args) throws IOException {
         // definindo a configuração regional padrão para o programa
@@ -94,8 +94,8 @@ public class Sistema {
          * senha: admin
          * 
          * FUNCINÁRIO:
-         * login: colab1
-         * senha: colab1
+         * login: funci
+         * senha: funci
          */
 
         ManipuladorJson manipuladorJson = new ManipuladorJson();
