@@ -1,24 +1,18 @@
 [
     {
+        "nomePessoa": "Marcos",
+        "sobrenomePessoa": "Cruz",
+        "CPF": "12345678901",
         "enderecoHospede": "Diamantina",
         "telefoneHospede": "38999707070",
-        "emailHospede": "trabalh0.poo@gmail.com",
-        "reservasHospede": [
-            {
-                "numeroCartao": "12466607691",
-                "precoReserva": 300.00,
-                "precoReservaTotal": 1500.00,
-                "dataInicio": {"year": 2023, "month": 7, "day": 1},
-                "dataFim": {"year": 2023, "month": 12, "day": 24},
-                "quarto": 
-                [
-                    {
-                        "numeroQuarto": "0",
-                        "statusQuarto": "Reservado",
-                        "tipoQuarto": "Luxo"
-                    }
-                ]
-            }
-        ]
+        "emailHospede": "trabalh0.poo@gmail.com"
+    },
+    {
+        "nomePessoa": "Filpe",
+        "sobrenomePessoa": "Costa",
+        "CPF": "0987654321",
+        "enderecoHospede": "Diamantina",
+        "telefoneHospede": "38977412735",
+        "emailHospede": "poo.igual.loucura@gmail.com"
     }
 ]
