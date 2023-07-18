@@ -5,63 +5,25 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Scanner;
 
-import br.com.pousada.pessoas.*;
-import br.com.pousada.servicos.*;
+import br.com.pousada.pessoas.Administrador;
+import br.com.pousada.pessoas.Funcionario;
+import br.com.pousada.pessoas.Hospede;
+import br.com.pousada.pessoas.HospedeComparator;
+import br.com.pousada.pessoas.Usuario;
+import br.com.pousada.servicos.GerenciadorAdm;
+import br.com.pousada.servicos.GerenciadorFunci;
+import br.com.pousada.servicos.Reserva;
+import br.com.pousada.servicos.ReservaComparator;
 
 /**
  * Classe principal para o Sistema da Pousada contendo o método main()
  *
  * @author Marcos Vinícius Santos Cruz
  * @author Filipe Fernades Costa
- * @version 1.02.2
+ * @version 1.02.3
  */
 // Q.1 - Implementar todas as classes com base no diagrama de classes criado
 public class Sistema {
-
-    /**
-     * Q.12 - Criar um método de classe para classe Sistema que deverá retornar
-     * quantas instâncias foram criadas dos tipos Cliente e Reserva;
-     */
-    private static int contadorHospedes = 0;
-    private static int contadorReservas = 0;
-
-    /**
-     * @return número de instâncias de Hospede/Cliente
-     */
-    public static int getContadorHospedes() {
-        return contadorHospedes;
-    }
-
-    /**
-     * @return número de instâncias de Reserva
-     */
-    public static int getContadorReservas() {
-        return contadorReservas;
-    }
-
-    /**
-     * Função responsável por contar o número de instâncias de Hospede/Cliente
-     */
-    public static void setContadorHospedes() {
-        for (Hospede hospede : GerenciadorAdm.getListaHospedes()) {
-            if (hospede != null) {
-                Sistema.contadorHospedes++;
-            }
-        }
-    }
-
-    /**
-     * Função responsável por contar o número de instâncias de Reserva
-     */
-    public static void setContadorReservas() {
-        for (Reserva reserva : GerenciadorFunci.getListaReservas()) {
-            if (reserva != null) {
-                Sistema.contadorReservas++;
-            }
-        }
-    }
-
-    // ==============================================================================================
 
     /**
      *
@@ -110,18 +72,18 @@ public class Sistema {
         if (userAtual instanceof Administrador) {
             System.out.println("Nível de Acesso: Administrador " + userAtual);
 
-            // cadastro
+            // Q.7 - Cadastrar, alterar ou excluir clientes;
             System.out.println("\nCadastro Hóspede \n------------------------------");
             menuAdm.cadHospede();
 
-            // edição de dados
+            // Q.7 - Cadastrar, alterar ou excluir clientes;
             System.out.println("\nAlterar Dados de Hóspedes \n------------------------------");
             Scanner scanner = new Scanner(System.in);
             System.out.println("Entre com um CPF válido: ");
             String cpfHospede = scanner.nextLine();
             menuAdm.alterarHospede(cpfHospede);
 
-            // lista de reservas
+            // Q.8 - Verificar e imprimir dados das reservas e dos clientes;
             System.out.println("\nLista de Reservas \n------------------------------");
             System.out.println("CPF do Hóspede: ");
             String cpf = scanner.nextLine();
@@ -154,21 +116,30 @@ public class Sistema {
                 }
             }
 
-            // contador hóspedes private
+            // Q.11 - Criar duas variáveis de classe (static) que irão armazenar quantas
+            // instâncias foram criadas dos tipos Cliente dentro da classe Sistema usando
+            // duas soluções diferentes:
+
+            // a. Uma delas utilizando o enfoque de encapsulamento de acordo com a
+            // engenharia de software (atributo private static e métodos get e set);
             GerenciadorAdm.setHospedeCountPrivate();
             System.out.println("\nQuantidade de Hóspedes cadastrados: " + GerenciadorAdm.getHospedeCountPrivate());
 
-            // contador hóspedes protected
+            // b. Na segunda estratégia, implementar usando o controle de acesso do tipo
+            // protect;
             GerenciadorAdm.setHospedeCountProtected();
             System.out.println("\nQuantidade de Hóspedes cadastrados: " + GerenciadorAdm.getHospedeCountProtected());
+
         } else if (userAtual instanceof Funcionario) {
             System.out.println("Nível de Acesso: Funcionário " + userAtual);
 
-            // extrato
+            // Q.9 - As reservas e os clientes devem ser salvas de forma dinâmica no
+            // sistema.
             System.out.println("\nCadastro Reservas \n------------------------------");
             menuFunci.cadastroReserva();
 
-            // listar todos os extratos
+            // Q.10 - Cada reserva efetuada vai gerar um extrato que deverá ser impresso e
+            // salvo junto com a informação do cliente que fez a reserva.
             System.out.println("\nExtratos Reservas \n------------------------------");
             manipuladorJson.descarregarExtratoReservas(menuFunci.extratosReservas());
             GerenciadorFunci.setExtratosReservas(manipuladorJson.assimilarExtratoReservas());
@@ -193,6 +164,8 @@ public class Sistema {
             System.out.println("Login ou Senha Inválidos!");
         }
 
+        // Q.14 - Salve e recupere todas as informações dos Clientes, Quartos,
+        // Colaboradores e Reservas em um arquivo de texto.
         manipuladorJson.descarregarGeral(menuFunci);
         if (userAtual instanceof Administrador) {
             manipuladorJson.descarregarAdm((Administrador) userAtual);
@@ -200,6 +173,8 @@ public class Sistema {
 
         Sistema.inciarSistema();
     }
+
+    // =====================================================================================================
 
     /**
      * função para login no sistema
@@ -288,7 +263,49 @@ public class Sistema {
                 System.out.println("Entrada Inválida! Encerrando...");
             }
         }
+    }
 
+    /**
+     * Q.12 - Criar um método de classe para classe Sistema que deverá retornar
+     * quantas instâncias foram criadas dos tipos Cliente e Reserva;
+     */
+    private static int contadorHospedes = 0;
+    private static int contadorReservas = 0;
+
+    /**
+     * @return número de instâncias de Hospede/Cliente
+     */
+    public static int getContadorHospedes() {
+        return contadorHospedes;
+    }
+
+    /**
+     * @return número de instâncias de Reserva
+     */
+    public static int getContadorReservas() {
+        return contadorReservas;
+    }
+
+    /**
+     * Função responsável por contar o número de instâncias de Hospede/Cliente
+     */
+    public static void setContadorHospedes() {
+        for (Hospede hospede : GerenciadorAdm.getListaHospedes()) {
+            if (hospede != null) {
+                Sistema.contadorHospedes++;
+            }
+        }
+    }
+
+    /**
+     * Função responsável por contar o número de instâncias de Reserva
+     */
+    public static void setContadorReservas() {
+        for (Reserva reserva : GerenciadorFunci.getListaReservas()) {
+            if (reserva != null) {
+                Sistema.contadorReservas++;
+            }
+        }
     }
 
     // Q.3 - Sobrescrever o método toString() de todas as classes implementadas
