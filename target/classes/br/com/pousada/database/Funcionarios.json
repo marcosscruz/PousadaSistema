@@ -1,7 +1,16 @@
-{
-    "loginUsuario":"funci",
-    "senhaUsuario":"funci",
-    "nomePessoa":"Nome1",
-    "sobrenomePessoa":"Sobrenome1",
-    "CPF":"12345678901"
-}
+[
+    {
+        "loginUsuario": "funci",
+        "senhaUsuario": "funci",
+        "nomePessoa": "Nome1",
+        "sobrenomePessoa": "Sobrenome1",
+        "CPF": "22222222222"
+    },
+    {
+        "loginUsuario": "funci1",
+        "senhaUsuario": "funci1",
+        "nomePessoa": "Nome2",
+        "sobrenomePessoa": "Sobrenome2",
+        "CPF": "33333333333"
+    }
+]
