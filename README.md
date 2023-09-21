@@ -1,2 +1,2 @@
 # PousadaSistema
- Projeto realizado durante a disciplina de POO utilizando a linguagem Java
+Project carried out during the OOP discipline using the Java language
